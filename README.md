@@ -2,41 +2,54 @@
 
 ***Images***
 
+Registration Database:
 
 ![Image](https://github.com/user-attachments/assets/1576275d-81a1-4624-a082-57b9b96add77)
 
+Cities Database:
 
 ![Image](https://github.com/user-attachments/assets/78076a12-8626-419a-ab5e-bc3402263b86)
 
+Project 1st part:
 
 ![Image](https://github.com/user-attachments/assets/22b3f6d3-30c6-4a2b-8da7-581937a6ab0a)
 
+Project 2nd part:
 
 ![Image](https://github.com/user-attachments/assets/f3f854b9-b272-4311-bd71-84903d72a85a)
 
+Full project:
 
 ![Image](https://github.com/user-attachments/assets/0bc37ab2-cd53-4c58-baca-dc132c0c1f04)
 
+Sign Up:
 
 ![Image](https://github.com/user-attachments/assets/ed45fd54-53e6-4baf-b9e3-503273ee34b6)
 
+Login:
 
 ![Image](https://github.com/user-attachments/assets/4b4a8246-ad31-4762-8a77-606279a6a43e)
 
+Weather Update:
 
 ![Image](https://github.com/user-attachments/assets/3e45105b-8382-47e3-8e9a-7d569ee468ca)
 
+Dummy AQI Table:
 
 ![Image](https://github.com/user-attachments/assets/98751c3f-be79-4ee5-9719-96c5109a733f)
 
+Age from Calender:
 
 ![Image](https://github.com/user-attachments/assets/967a04ca-e1c2-4dcd-810a-ee26e24a97c6)
 
+One can choose his favorite Background color ( It will save in the Browsers Cookie ):
 
 ![Image](https://github.com/user-attachments/assets/a09d1e08-20f3-44dc-906f-b0ac2e9e21e9)
 
+Show Datas:
 
 ![Image](https://github.com/user-attachments/assets/f14a9a9b-ebf3-4eb4-aeca-847f0c8c1b2b)
+
 
 
 ![Image](https://github.com/user-attachments/assets/3122f487-6a5a-48d3-894a-5b6955795b48)
