@@ -1,3 +1,34 @@
+🌐 AIR INDEX QUALITY Check with User Personalization
+
+Welcome to a feature-rich PHP-based web application that combines real-time weather updates, dummy AQI data, and user personalization using cookies and sessions. Designed with HTML, styled using CSS, and validated via JavaScript, this app ensures an interactive and engaging experience.
+
+🚀 Key Features
+✅ User Registration with validation (JavaScript)
+✅ Accepts Terms & Conditions before creating account
+✅ Saves preferred background color via cookies
+✅ Login/Logout functionality (PHP sessions)
+✅ After login: "Welcome, [Username]" in preferred color
+✅ Weather Search by city (OpenWeatherMap API)
+✅ Dummy AQI City List shown during registration
+✅ Select up to 10 cities from a list of 21
+✅ Enforces minimum 1 city selection
+✅ Displays Cities, Countries, AQI, and AQI Status
+✅ Background color stays personalized via cookies
+✅ Smooth logout to the home page
+
+🛠️ Built With
+Frontend: HTML5 + CSS3 (Custom styling)
+
+Validation: JavaScript
+
+Backend: PHP
+
+Database: MySQL
+
+API: OpenWeatherMap
+
+----------------------------------------------------------------------------------------
+
 Registration SQL:
 
 ![Image](https://github.com/user-attachments/assets/2bc6ff5b-027b-4501-94e9-a257f315d5f9)
@@ -104,8 +135,7 @@ He/She can choose Minimum 1 city and also the Logout option:
 
 
 
-
-
+*** Project Link: https://github.com/mrmahiislam/WebTech-Project/tree/main ***
 
 
 
