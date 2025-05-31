@@ -1,0 +1,14 @@
+So you can see that when any user will registration in the SignUp.php page and click on submit button>> All the datas or infos will be shown in process.php page. If user want to click cancel button it will redirect the user to SignUp.php page again or if user want to confirm it will set his all informations (Full Name, Email, Password, Age, Zip Code, Preferred City) in the Database (Table name - registration) and the Preferred Color will be saved into browsers Cookie. The cookies will not being overlapped if multiple users registered. For every successfull registered users their preffered color is being set in the cookie. So the many the user signed up the many the cookies color they set. Also want to say that only after successfull registration after clicking on Confirm button in process.php only then the users color cookie will be setted, if not successful or failed the users color cookie will not be saved. Now please help me where to change what for the corrected output I will get In Sha Allah what I want!!
+
+
+-----------------------
+
+
+So you have my SignUp.php code. Here you can see Box3 and inside box3 there is Login part, But login button is missing. You also know that the color is saved in cookie and rest of the other satas are in Database. So when any user want to Login then he have to enter the correct email and password that is already saved in database. So validationn is must. Then if someone correctly entered email and password that is in the Database he will be logged in to a new webpage called (request.php). Please help me where to do what??
+
+
+---------------------------
+
+Okay let me tell you once again. If the email or password or both are wrong also if the datas are not in database there should be shown error like (Password does not match etc...) in the upper of Login button in red color text, the page will not refresh to its own page again, just show the error text if any. And if everything is fine and the data is founded in database only then user will logged in and he can show request.php page. 
+
+Now please fix all the problems from the very beginning

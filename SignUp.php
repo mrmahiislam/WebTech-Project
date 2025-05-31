@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Air Index Quality</title>
+  <link rel="icon" href="images/AirIndex.png" type="image/png">
+  <style>
+  * {
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+      background-color:rgb(55, 55, 55);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      padding: 20px;
+      justify-content: space-between;
+      position: relative;
+      width: 100%;
+      background: linear-gradient(135deg, #3498db, #2c3e50);
+      color: white; 
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+    }
+  
+    .header h1 {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      width: max-content;
+    }
+
+    .header img {
+      margin-left: auto;
+    }
+
+.container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: 1600px;
+      margin: 20px auto; /* Added margin to detach from edges */
+      padding: 0 20px; /* Added padding to prevent touching viewport edges */
+    }
+
+    .row {
+      display: flex;
+      width: 100%;
+      gap: 20px; /* Added gap between columns */
+      margin-bottom: 20px; /* Added gap between rows */
+    }
+
+    .column {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 20px; /* Added gap between boxes */
+    }
+.box {
+  padding: 16px;
+  border-radius: 12px;
+  background-color: #c7d8e2;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', sans-serif;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.box-heading {
+  font-size: 26px;
+  font-weight: 600;
+  margin-top: 20px;      /* ⬅️ Add space ABOVE */
+  margin-bottom: 30px;   /* Optional: space BELOW */
+  color: black;
+  text-align: center;
+}
+
+
+.aqi-table {
+  width: 70%;
+  margin-top: 0;
+  border-collapse: collapse;
+  table-layout: fixed;
+  border: 2px solid #444; /* 🔲 full table border */
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.aqi-table thead {
+  background: #3498db;
+  color: white;
+}
+
+.aqi-table th,
+.aqi-table td {
+  padding: 12px 18px;
+  font-size: 15px;
+  text-align: center;
+  border-bottom: 1px solid #ddd; /* row lines */
+}
+
+.aqi-table tbody td:nth-child(2) {
+  filter: blur(6px);
+  transition: filter 0.3s ease;
+}
+
+.aqi-table tbody td:nth-child(2) {
+  filter: blur(5px);
+}
+
+/* ✅ Thick vertical center line between City and AQI */
+.aqi-table th:first-child,
+.aqi-table td:first-child {
+  border-right: 2px solid rgb(219, 226, 231);
+}
+
+/* Optional: clean up header divider line if needed */
+.aqi-table thead th:first-child {
+  border-right: 2px solid #fff;
+}
+
+.aqi-table tbody tr:hover {
+  background-color: #f0f0f0;
+}
+
+
+
+
+.box2 {
+
+  height: 400px;
+  background-color: #c7d8e2;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 20px;
+  
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+
+
+
+  /* Weather Search Styles */
+.weather-search-container {
+  padding: 15px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.search-group {
+  display: flex;
+  margin: 10px 0;
+}
+
+.search-group button:hover {
+  background: #2c80b4;
+}
+
+#weather-search {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px 0 0 4px;
+}
+
+/* Results box */
+#weather-results {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.weather-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  padding: 20px;
+  width: 100%;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  font-family: 'Segoe UI', sans-serif;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.weather-card h4 {
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #222;
+}
+
+.weather-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin: 10px 0;
+}
+
+.weather-main img {
+  width: 50px;
+  height: 50px;
+}
+
+.weather-main .temp {
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.weather-details div {
+  margin-top: 5px;
+  font-size: 14px;
+  color: #444;
+}
+
+/* Placeholder message */
+.weather-placeholder {
+  color: #888;
+  font-style: italic;
+}
+
+.search-group button {
+  padding: 10px 18px;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 0 8px 8px 0;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+#weather-search {
+
+  padding: 10px 15px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px 0 0 8px;
+  outline: none;
+}
+
+.weather-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  padding: 15px;
+  width: 100%;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Header with refresh */
+.weather-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.weather-header h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.refresh-btn {
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+  color: #3498db;
+  transition: transform 0.3s ease;
+}
+
+.refresh-btn:hover {
+  transform: rotate(360deg);
+}
+
+/* Input group */
+.search-group {
+  display: flex;
+  margin: 15px 0;
+}
+
+.weather-placeholder {
+  color: #666;
+  font-style: italic;
+}
+
+.box3 {
+  height: 850px;
+  display: flex;
+  justify-content: center;    /* centers horizontally */
+  align-items: center;        /* centers vertically */
+  background-color: #c7d8e2;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  overflow-y: auto;
+  padding: 7px;
+}
+    
+    .box4 {
+      height: 410px;
+      border-radius: 10px; /* Added rounded corners */
+      background-color: #c7d8e2;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Subtle shadow */
+    }
+
+    .form-container {
+  background-color: transparent; /* Removes black background */
+  border: none; /* Removes border */
+  padding: 15px;
+  width: 100%;
+  max-width: 700px;
+  box-shadow: none; /* Removes shadow */
+  margin: 10px 0;
+   margin-top: -40px;
+}
+
+
+    h2 {
+      text-align: center;
+      font-weight: 600;
+      margin-bottom: 15px;
+       margin-top: 65px; 
+      color:rgb(0, 0, 0);
+      font-size: 28px;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 10px;
+    }
+
+    /* ADDED LABEL STYLING */
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+      color:rgb(0, 0, 0)
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #dbdbdb;
+      border-radius: 10px;
+      background-color: #fafafa;
+    }
+
+
+    input[type="color"] {
+      height: 40px;
+      width: 60px; /* Reduced from 100% */
+      padding: 3px;
+      cursor: pointer;
+      flex-shrink: 0; /* Prevent shrinking */
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #a8a8a8;
+    }
+
+    .show-password {
+      position: absolute;
+      right: 8px;
+      top: 35px; /* Adjusted for label */
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #666;
+      font-size: 12px;
+    }
+
+        .submit-button {
+      padding: 10px;
+      background-color: #0095f6;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      width: 100%;
+      cursor: pointer;
+      font-size: 15px;
+      margin-top: 15px; /* Changed from 5px */
+    }
+
+    .submit-button:hover {
+      background-color: #007bd1;
+    }
+
+
+
+
+    .error {
+      color: red;
+      font-size: 12px;
+      text-align: center;
+      margin: 5px 0;
+      min-height: 18px;
+      margin-top: 15px;
+      margin-bottom: -5px; /* Space below error message */
+    }
+
+    .terms-container {
+      display: flex;
+      align-items: center;
+      margin-top: 15px;  /* Adds space above checkbox */
+      margin-bottom: 5px; /* Keeps submit button close */
+      
+    }
+
+    .terms-label {
+      margin-left: 6px;
+      font-size: 12px;
+    }
+
+    .terms-link {
+      color: #0095f6;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .terms-link:hover {
+      text-decoration: underline;
+    }
+
+    @keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+    @media (max-width: 768px) {
+      .header {
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 15px;
+      }
+      
+      .header h1 {
+        position: static;
+        transform: none;
+        order: 1;
+        width: 100%;
+        font-size: 24px;
+      }
+      
+      .header img {
+        order: 2;
+        margin-left: 0;
+        height: 60px;
+        width: 80px;
+      }
+      
+      .row {
+        flex-direction: column;
+      }
+      
+      .form-container {
+        padding: 15px;
+      }
+      
+      .box, .box4 {
+        height: auto;
+        min-height: 250px;
+      }
+
+      .box2 {
+      height:400px;
+      }
+      
+      .box3 {
+        height: auto;
+        min-height: 454px;
+        padding: 5px;
+      }
+      
+      h2 {
+        font-size: 20px;
+        margin-bottom: 12px;
+      }
+
+
+
+      .logo {
+        height: 60px; /* Adjust as needed */
+        width: auto; /* Maintain aspect ratio */
+        margin-right: 20px; /* Space between logo and text */
+    }
+      
+      input, select {
+        padding: 8px;
+        font-size: 13px;
+      }
+
+      /* Adjusted for mobile */
+      .show-password {
+        top: 32px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1 onclick="window.location.reload()" style="cursor: pointer;">Air Index Quality</h1>
+     <img src="images/AirIndex.png" alt="icon" height="50px" width="50px" onclick="window.location.reload()" style="cursor: pointer;">
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="column">
+
+      <div class="box">
+  <h3 class="box-heading">Sign up to see your required cities' AQI</h3>
+  <table class="aqi-table">
+    <thead>
+      <tr>
+        <th>City</th>
+        <th>AQI</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>New York</td><td>42</td></tr>
+      <tr><td>London</td><td>48</td></tr>
+      <tr><td>Paris</td><td>55</td></tr>
+      <tr><td>Tokyo</td><td>60</td></tr>
+      <tr><td>Delhi</td><td>310</td></tr>
+      <tr><td>Beijing</td><td>180</td></tr>
+      <tr><td>Dubai</td><td>95</td></tr>
+      <tr><td>Sydney</td><td>33</td></tr>
+      <tr><td>Los Angeles</td><td>72</td></tr>
+      <tr><td>Moscow</td><td>88</td></tr>
+      <tr><td>Bangkok</td><td>110</td></tr>
+      <tr><td>Singapore</td><td>41</td></tr>
+      <tr><td>Berlin</td><td>39</td></tr>
+      <tr><td>Rome</td><td>44</td></tr>
+      <tr><td>Madrid</td><td>51</td></tr>
+      <tr><td>Seoul</td><td>101</td></tr>
+    </tbody>
+  </table>
+</div>
+
+
+
+
+       <div class="box box2">
+  <div class="weather-search-container">
+    <div class="weather-header">
+      <h3>🌦️ Weather Search</h3>
+      <button class="refresh-btn" onclick="searchWeather()" title="Refresh weather">
+        🔄
+      </button>
+    </div>
+    <div class="search-group">
+      <input type="text" id="weather-search" placeholder="Enter city or country...">
+      <button onclick="searchWeather()">Search</button>
+    </div>
+    <div id="weather-results">
+      <div class="weather-placeholder">
+        <p>Search for a city to see weather</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+      </div>
+      <div class="column">
+        <div class="box box3">
+          <!-- Registration Form -->
+          <div class="form-container">
+          <form id="registrationForm" action="process.php" method="POST">
+              <h2>Sign up to Air Index</h2>
+
+              <!-- Full Name Field with Label -->
+              <div class="input-group">
+                <label for="fullname">Full Name</label>
+                <input type="text" id="fullname" name="fullname" placeholder="Enter your full name" required>
+              </div>
+
+              <!-- Email Field with Label -->
+              <div class="input-group">
+                <label for="email">Email</label>
+                <input type="text" id="email" name="email" placeholder="xx-xxxxx-x@student.aiub.edu" required>
+              </div>
+              
+              <!-- Password Field with Label -->
+              <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Create a password" required>
+                <button type="button" class="show-password" onclick="togglePassword('password')">Show</button>
+              </div>
+              
+              <!-- Confirm Password Field with Label -->
+              <div class="input-group">
+                <label for="confirmpassword">Confirm Password</label>
+                <input type="password" id="confirmpassword" name="confirmpassword" placeholder="Re-enter your password" required>
+                <button type="button" class="show-password" onclick="togglePassword('confirmpassword')">Show</button>
+              </div>
+              
+              <!-- Age Field with Label -->
+              <div class="input-group">
+                <label for="age">Age</label>
+                <input type="date" id="age" name="age" placeholder="Enter your age" required>
+              </div>
+              
+              <!-- Zip Code Field with Label -->
+              <div class="input-group">
+                <label for="zipcode">Zip Code</label>
+                <input type="text" id="zipcode" name="zipcode" placeholder="Enter 4-digit zip code" required>
+              </div>
+
+              <!-- City Field with Label -->
+              <div class="input-group">
+                <label for="city">Preferred City</label>
+                <select name="city" id="city" required>
+                  <option value="">Select your city</option>
+                  <option value="dhaka">Dhaka</option>
+                  <option value="rajshahi">Rajshahi</option>
+                  <option value="chittagong">Chittagong</option>
+                  <option value="khulna">Khulna</option>
+                  <option value="rangpur">Rangpur</option>
+                  <option value="mymensingh">Mymensingh</option>
+                  <option value="barisal">Barisal</option>
+                  <option value="sylhet">Sylhet</option>
+                </select>
+              </div>
+
+              <div class="input-group">
+              <label for="favcolor">Choose Preferred Color</label>
+              <input type="color" id="favcolor" name="favcolor" value="#ffffff" required>
+              </div>
+
+                        <div class="terms-container">
+              <input type="checkbox" name="terms" id="terms" style="width: 14px; height: 14px;">
+              <label for="terms" class="terms-label">
+                <span style="color: black;">Accept</span>
+                <a href="#" class="terms-link" onclick="showTerms()">Terms and Conditions</a>
+              </label>
+            </div>
+
+
+              <div id="errorMsg" class="error"></div>
+
+              <button type="submit" class="submit-button" onclick="return validateForm()">Sign Up</button>
+            </form>
+          </div>
+        </div>
+<div class="box box4">
+    <div class="form-container">
+        <h2>Login</h2>
+        <form id="loginForm" onsubmit="event.preventDefault(); handleLogin();">
+            <div class="input-group">
+                <label for="login_email">Email</label>
+                <input type="text" id="login_email" name="login_email" placeholder="xx-xxxxx-x@student.aiub.edu" required>
+            </div>
+            <div class="input-group">
+                <label for="login_password">Password</label>
+                <input type="password" id="login_password" name="login_password" placeholder="Enter your password" required>
+                <button type="button" class="show-password" onclick="togglePassword('login_password')">Show</button>
+            </div>
+
+            <!-- ✅ Moved error message here -->
+            <div id="loginError" class="error">
+                <?php 
+                if (isset($_SESSION['login_error'])) {
+                    echo htmlspecialchars($_SESSION['login_error']);
+                    unset($_SESSION['login_error']);
+                }
+                ?>
+            </div>
+
+            <button type="submit" class="submit-button">Login</button>
+        </form>
+    </div>
+</div>
+
+
+ <script>
+
+async function handleLogin() {
+    const email = document.getElementById('login_email').value.trim();
+    const password = document.getElementById('login_password').value.trim();
+    const errorElement = document.getElementById('loginError');
+    
+    errorElement.textContent = '';
+
+    // Basic validation
+    if (!email || !password) {
+        errorElement.textContent = "Please fill in all fields.";
+        return;
+    }
+
+    // Email format validation
+    const emailPattern = /^\d{2}-\d{5}-\d@student\.aiub\.edu$/;
+    if (!emailPattern.test(email)) {
+        errorElement.textContent = "Email must be in format xx-xxxxx-x@student.aiub.edu";
+        return;
+    }
+
+    try {
+        const formData = new FormData();
+        formData.append('login_email', email);
+        formData.append('login_password', password);
+
+        const response = await fetch('process.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            window.location.href = "request.php";
+        } else {
+            errorElement.textContent = result.error || 'Login failed. Please try again.';
+        }
+    } catch (error) {
+        console.error("Login error:", error);
+        errorElement.textContent = 'An error occurred. Please try again.';
+    }
+}
+
+
+    function validateForm() {
+      const fullname = document.getElementById("fullname").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const confirmPassword = document.getElementById("confirmpassword").value.trim();
+      const age = document.getElementById("age").value.trim();  // This is your DOB input now
+      const zipCode = document.getElementById("zipcode").value.trim();
+      const city = document.getElementById("city").value;
+      const termsChecked = document.getElementById("terms").checked;
+      const errorMsg = document.getElementById("errorMsg");
+      const favColor = document.getElementById("favcolor").value || "#ffffff";
+
+      errorMsg.innerHTML = ""; // clear previous errors
+
+      // Full Name Validation
+      if (!fullname) {
+        errorMsg.innerHTML = "Full Name is required.";
+        return false;
+      }
+
+      // Check for numbers
+      if (/\d/.test(fullname)) {
+        errorMsg.innerHTML = "Full Name cannot contain numbers.";
+        return false;
+      }
+
+      // Check for special characters (except single dot)
+      if (/[^a-zA-Z\s.]/.test(fullname)) {
+        errorMsg.innerHTML = "Full Name cannot contain special characters.";
+        return false;
+      }
+
+      // Check for multiple dots or invalid dot placement
+      if ((fullname.match(/\./g) || []).length > 1) {
+        errorMsg.innerHTML = "Only one dot (.) is allowed in Full Name.";
+        return false;
+      }
+
+      if (fullname.startsWith('.') || fullname.endsWith('.')) {
+        errorMsg.innerHTML = "Dot (.) cannot be at start or end of Full Name.";
+        return false;
+      }
+
+      if (fullname.indexOf('.') !== -1 && fullname.indexOf('.') !== fullname.lastIndexOf('.')) {
+        errorMsg.innerHTML = "Only one dot (.) is allowed in Full Name.";
+        return false;
+      }
+
+      // Check for consecutive dots
+      if (/\.{2,}/.test(fullname)) {
+        errorMsg.innerHTML = "Consecutive dots are not allowed in Full Name.";
+        return false;
+      }
+
+      // Check for empty fields (now includes fullname)
+      if (!email || !password || !confirmPassword || !age || !zipCode || !city) {
+        errorMsg.innerHTML = "All fields are required.";
+        return false;
+      }
+
+      // Email format validation
+      const emailPattern = /^\d{2}-\d{5}-\d@student\.aiub\.edu$/;
+      if (!emailPattern.test(email)) {
+        errorMsg.innerHTML = "Email must be in format xx-xxxxx-x@student.aiub.edu";
+        return false;
+      }
+
+      // Password length
+      if (password.length < 8) {
+        errorMsg.innerHTML = "Password must be at least 8 characters.";
+        return false;
+      }
+
+      // Password match
+      if (password !== confirmPassword) {
+        errorMsg.innerHTML = "Passwords do not match.";
+        return false;
+      }
+
+      // *** Updated Age (DoB) Validation ***
+      if (!age) {
+        errorMsg.innerHTML = "Date of birth is required.";
+        return false;
+      }
+
+      const dob = new Date(age);
+      const today = new Date();
+
+      let calculatedAge = today.getFullYear() - dob.getFullYear();
+      const monthDiff = today.getMonth() - dob.getMonth();
+      const dayDiff = today.getDate() - dob.getDate();
+
+      if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+        calculatedAge--;
+      }
+
+      if (calculatedAge < 18) {
+        errorMsg.innerHTML = "You must be at least 18 years old.";
+        return false;
+      }
+      // *** End Age validation ***
+
+      // Zip Code validation
+      if (!/^\d{4}$/.test(zipCode)) {
+        errorMsg.innerHTML = "Zip Code must be exactly 4 digits.";
+        return false;
+      }
+
+      // Terms and conditions
+      if (!termsChecked) {
+        errorMsg.innerHTML = "Please accept the Terms and Conditions.";
+        return false;
+      }
+
+      if (allValidationsPass) {
+        alert("Form submitted successfully!");
+        setColorCookie(email, favColor);  // Only set cookie on success
+        return true;
+      }
+    }
+
+      function setColorCookie(email, color) {
+        const safeEmail = email.replace(/[^a-zA-Z0-9]/g, '_');
+        const cookieName = `userColor_${safeEmail}`;
+        const d = new Date();
+        d.setTime(d.getTime() + (30 * 24 * 60 * 60 * 1000)); // 30 days
+        document.cookie = `${cookieName}=${color};expires=${d.toUTCString()};path=/`;
+      }
+
+    function togglePassword(fieldId) {
+      const passwordField = document.getElementById(fieldId);
+      const button = document.querySelector(`#${fieldId} + .show-password`);
+      
+      if (passwordField.type === "password") {
+        passwordField.type = "text";
+        button.textContent = "Hide";
+      } else {
+        passwordField.type = "password";
+        button.textContent = "Show";
+      }
+    }
+
+
+
+    function setColorCookie(email, color) {
+    const safeEmail = email.replace(/[^a-zA-Z0-9]/g, '_'); // More comprehensive sanitization
+    const cookieName = `userColor_${safeEmail}`;
+    setCookie(cookieName, color, 30);
+    }
+
+    function togglePassword(fieldId) {
+      const passwordField = document.getElementById(fieldId);
+      const button = document.querySelector(`#${fieldId} + .show-password`);
+      
+      if (passwordField.type === "password") {
+        passwordField.type = "text";
+        button.textContent = "Hide";
+      } else {
+        passwordField.type = "password";
+        button.textContent = "Show";
+      }
+    }
+
+    function setCookie(name, value, days) {
+  const d = new Date();
+  d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+  document.cookie = `${name}=${value};expires=${d.toUTCString()};path=/`;
+}
+
+
+      // Add this function to get user-specific color
+      function getUserColor(email) {
+        const safeEmail = email.replace(/[^a-zA-Z0-9]/g, '_');
+        const cookieName = `userColor_${safeEmail}`;
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+          const [name, value] = cookie.trim().split('=');
+          if (name === cookieName) {
+            return value;
+          }
+        }
+        return "#ffffff"; // Default color
+      }
+
+
+      // Weather Search Functionality
+async function searchWeather() {
+  const searchInput = document.getElementById('weather-search').value.trim();
+  const resultsDiv = document.getElementById('weather-results');
+  
+  if (!searchInput) {
+    resultsDiv.innerHTML = `
+      <div class="weather-card error">
+        <p>Please enter a city name</p>
+      </div>
+    `;
+    return;
+  }
+
+  // Show loading state
+  resultsDiv.innerHTML = `
+    <div class="weather-card loading">
+      <p>Searching for ${searchInput}...</p>
+    </div>
+  `;
+
+  try {
+    // Use your weather.php endpoint
+    const response = await fetch(`weather.php?city=${encodeURIComponent(searchInput)}`);
+    const data = await response.json();
+    
+    if (data.cod !== 200) {
+      throw new Error(data.message || 'City not found');
+    }
+    
+    // Display results
+    resultsDiv.innerHTML = `
+      <div class="weather-card">
+        <h4>${data.name}, ${data.sys?.country || ''}</h4>
+        <div class="weather-main">
+          <img src="https://openweathermap.org/img/wn/${data.weather[0].icon}.png" 
+               alt="${data.weather[0].description}">
+          <div>
+            <div class="temp">${Math.round(data.main.temp)}°C</div>
+            <div>${data.weather[0].main}</div>
+          </div>
+        </div>
+        <div class="weather-details">
+          <div>💧 Humidity: ${data.main.humidity}%</div>
+          <div>🌬️ Wind: ${data.wind.speed} km/h</div>
+          <div>🔄 Pressure: ${data.main.pressure} hPa</div>
+        </div>
+      </div>
+    `;
+    
+  } catch (error) {
+    resultsDiv.innerHTML = `
+      <div class="weather-card error">
+        <p>⚠️ Error: ${error.message}</p>
+        <small>Try another location</small>
+      </div>
+    `;
+  }
+}
+
+// Allow Enter key to trigger search
+document.getElementById('weather-search').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') {
+    searchWeather();
+  }
+});
+
+
+// Generic cookie getter
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+
+function showTerms() {
+  event.preventDefault();
+  window.open("terms.php", "_blank", "width=" + screen.width + ",height=" + screen.height + ",scrollbars=yes,resizable=yes");
+}
+
+ 
+
+       function applyUserColor() {
+        <?php if(isset($_SESSION['user_email'])): ?>
+            const email = "<?php echo $_SESSION['user_email']; ?>";
+            const color = getUserColor(email);
+            
+            // Apply to multiple elements
+            if(color && color !== '#ffffff') {
+                document.querySelector('.header').style.backgroundColor = color;
+                document.querySelector('.submit-button').style.backgroundColor = color;
+            }
+        <?php endif; ?>
+    }
+
+    // 2. Then call it when DOM is ready
+    document.addEventListener('DOMContentLoaded', applyUserColor);
+      termsWindow.document.close();
+      
+      // Focus the new window
+      termsWindow.focus();
+    
+
+
+  </script>
+
+</body>
+</html>

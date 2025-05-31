@@ -1,0 +1,228 @@
+<?php
+session_start();
+session_regenerate_id(true);
+
+if (!isset($_SESSION['loggedin'])) {
+    header("Location: index.php");
+    exit();
+}
+
+// Database connection
+$conn = new mysqli("localhost", "root", "", "registrationsignup");
+if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
+
+// Fetch cities
+$result = $conn->query("SELECT id, name FROM cities ORDER BY name ASC");
+
+// Get cookie-based user color
+$userEmail = $_SESSION['email'] ?? '';
+$cookieKey = 'userColor_' . str_replace(['@', '.'], '_', $userEmail);
+$backgroundColor = $_COOKIE[$cookieKey] ?? '#007BFF'; // default to a visible color
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Select Cities - Air Index Quality</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --hover-color: #2980b9;
+            --background: #ecf0f1;
+            --white: #ffffff;
+            --danger: #e74c3c;
+            --danger-hover: #c0392b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background);
+            color: var(--primary-color);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            color: var(--white);
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            letter-spacing: 1px;
+        }
+
+        .welcome {
+            font-size: 32px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .welcome-text {
+            color: #000000; /* Black */
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto 50px auto;
+            padding: 20px;
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.6em;
+            color: var(--primary-color);
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 12px;
+            margin: 25px 0;
+        }
+
+        .checkbox-group label {
+            background-color: #f4f6f8;
+            padding: 10px 14px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .checkbox-group label:hover {
+            background-color: #e8eff6;
+            border-color: var(--accent-color);
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .submit-btn {
+            display: block;
+            margin: 30px auto 20px auto;
+            padding: 12px 28px;
+            background-color: var(--accent-color);
+            color: var(--white);
+            border: none;
+            border-radius: 30px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .submit-btn:hover {
+            background-color: var(--hover-color);
+        }
+
+        .button-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding: 0 150px;
+        }
+
+        .left-button {
+            flex: 1;
+            text-align: left;
+        }
+
+        .right-button {
+            flex: 1;
+            text-align: right;
+        }
+
+        .logout-btn {
+            display: block;
+            width: 150px;
+            margin: 0 auto;
+            padding: 10px 15px;
+            background-color: var(--danger);
+            color: var(--white);
+            text-align: center;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 0.95em;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .logout-btn:hover {
+            background-color: var(--danger-hover);
+        }
+
+        @media (max-width: 600px) {
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <script>
+        function limitCheckboxes() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(cb => {
+                cb.addEventListener('change', () => {
+                    const checkedCount = document.querySelectorAll('input[type="checkbox"]:checked').length;
+                    checkboxes.forEach(box => box.disabled = checkedCount >= 10 && !box.checked);
+                });
+            });
+        }
+        window.onload = limitCheckboxes;
+    </script>
+</head>
+<body>
+    <div class="header">
+        <h1>Air Index Quality Dashboard</h1>
+    </div>
+
+    <p class="welcome">
+        <span class="welcome-text">Welcome,</span> 
+        <span class="username" style="color: <?= htmlspecialchars($backgroundColor); ?>;">
+            <?= htmlspecialchars($_SESSION['fullname']) ?>
+        </span>
+    </p>
+
+    <div class="container">
+        <h2>Select up to 10 Cities</h2>
+        <form action="show.php" method="POST">
+            <div class="checkbox-group">
+                <?php while ($row = $result->fetch_assoc()): ?>
+                    <label>
+                        <input type="checkbox" name="cities[]" value="<?= $row['id'] ?>">
+                        <?= htmlspecialchars($row['name']) ?>
+                    </label>
+                <?php endwhile; ?>
+            </div>
+            <div class="button-row">
+                <div class="left-button">
+                    <button type="submit" class="submit-btn">Show AQI</button>
+                </div>
+                <div class="right-button">
+                    <a href="logout.php" class="logout-btn">Logout</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
